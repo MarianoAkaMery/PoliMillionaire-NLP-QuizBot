@@ -110,6 +110,14 @@ ANSWER_MODEL_NAME = "Qwen/Qwen2.5-3B-Instruct"
 GAME_MODE = "speech"
 ```
 
+The speech notebook is also configured for category benchmarking:
+
+```python
+RUN_FULL_SPEECH_GAME = False
+RUN_ALL_CATEGORIES_SPEECH_BENCHMARK = True
+SPEECH_BENCHMARK_RUNS_PER_CATEGORY = 3
+```
+
 Speech mode is expected to be harder because audio fetching, ASR latency, and
 transcription errors happen before answering. The speech notebook logs
 transcripts, audio sizes, time remaining after transcription, model output, and
