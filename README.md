@@ -79,7 +79,8 @@ For Maths, the decision order is:
 
 1. custom Maths/statistics tool;
 2. simple calculator;
-3. specialized Maths model.
+3. local Maths question normalization;
+4. specialized Maths model.
 
 For the other categories, the system uses the general 3B model.
 
@@ -98,6 +99,7 @@ Speech pipeline:
 ```text
 server audio question/options
 -> local Whisper transcription
+-> local transcript normalization
 -> local text model answer
 -> option_id submitted with official client
 ```
@@ -116,12 +118,14 @@ The speech notebook is also configured for category benchmarking:
 RUN_FULL_SPEECH_GAME = False
 RUN_ALL_CATEGORIES_SPEECH_BENCHMARK = True
 SPEECH_BENCHMARK_RUNS_PER_CATEGORY = 3
+USE_SPEECH_NORMALIZATION = True
 ```
 
 Speech mode is expected to be harder because audio fetching, ASR latency, and
 transcription errors happen before answering. The speech notebook logs
 transcripts, audio sizes, time remaining after transcription, model output, and
-final result.
+final result. It also logs both raw transcripts and normalized question/options
+so ASR-cleanup effects can be analyzed.
 
 ## Categories
 
