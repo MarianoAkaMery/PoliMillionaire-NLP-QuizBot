@@ -1,53 +1,45 @@
-# PoliMillionaire-NLP-QuizBot
+# PoliMillionaire NLP QuizBot
 
-Project repository for the NLP 2025/26 group assignment: building local chatbot
-systems that play **Who wants to be a PoliMillionaire?** through the official
-course API client.
+Repository for the NLP 2025/26 group assignment **Who wants to be a
+PoliMillionaire?**.
 
-## Current State
+The project builds and evaluates local open-weight chatbot systems that play the
+official online quiz through the course-provided API client. No paid LLM APIs are
+used for answering questions.
 
-We now keep two active project notebooks:
+## Submitted Notebooks
 
-- `PoliMillionaire_Steroids_Ensemble.ipynb`  
-  Main **text-mode** notebook.
+The repository contains two active notebooks:
 
-- `PoliMillionaire_Speech_Whisper.ipynb`  
-  Separate **speech-mode** experiment using local Whisper ASR.
+| Notebook | Purpose |
+| --- | --- |
+| `PoliMillionaire_Steroids_Ensemble.ipynb` | Main text-mode system and benchmark notebook |
+| `PoliMillionaire_Speech_Whisper.ipynb` | Speech-mode experiment using local Whisper ASR |
 
-The original `PoliMillionaire.ipynb` from the professor is kept as API
-reference material.
+The original `PoliMillionaire.ipynb` is kept as professor-provided reference
+material for the game API. The `millionaire_client/` package is the official
+course client used by both notebooks.
 
-The old starter notebook has been removed because the steroids notebook replaced
-it as the working text-mode version.
+## Main Text System
 
-## Main Text Approach
-
-The current text-mode system uses:
-
-- the official `millionaire_client` package;
-- text interaction mode;
-- local open-weight Hugging Face models;
-- category-specific prompts;
-- automatic benchmark runs across all four categories;
-- JSON logs for later error analysis;
-- a small Maths/statistics tool for recurring patterns;
-- a specialized local Maths model as fallback for Maths questions.
-
-No paid LLM APIs are used.
-
-No RAG is used in the main system. The reason is practical: the quiz is
-open-domain and the game has a 30-second limit. Real-time retrieval adds latency,
-while a static corpus would be hard to justify without adding noise.
-
-## Active Text Notebook
-
-Use:
+The main system is implemented in:
 
 ```text
 PoliMillionaire_Steroids_Ensemble.ipynb
 ```
 
-Default behavior:
+It uses:
+
+- the official `millionaire_client` package;
+- text interaction mode;
+- local Hugging Face open-weight models;
+- category-specific prompts;
+- all-category benchmarking;
+- JSON run logs;
+- deterministic Maths/statistics tools for recurring patterns;
+- a specialized local Maths model as fallback for Maths questions.
+
+Default benchmark settings:
 
 ```python
 RUN_FULL_GAME = False
@@ -55,16 +47,16 @@ RUN_ALL_CATEGORIES_BENCHMARK = True
 BENCHMARK_RUNS_PER_CATEGORY = 3
 ```
 
-So by default it runs:
+This runs three games for each category:
 
 ```text
-Entertainment x3
-Ancient History and Politics x3
-Science and Nature x3
-Maths x3
+Entertainment
+Ancient History and Politics
+Science and Nature
+Maths
 ```
 
-The current text model setup is:
+Current text model settings:
 
 ```python
 MODEL_A_NAME = "Qwen/Qwen2.5-3B-Instruct"
@@ -77,24 +69,21 @@ MATH_MAX_NEW_TOKENS = 4
 
 For Maths, the decision order is:
 
-1. custom Maths/statistics tool;
+1. custom Maths/statistics heuristics;
 2. simple calculator;
 3. specialized Maths model.
 
 Generative Maths question rewriting was tested and removed from the default
-pipeline because it added latency and sometimes produced non-parsable answers.
+pipeline because it increased latency and sometimes produced non-parsable model
+outputs.
 
-For the other categories, the system uses the general 3B model.
+## Speech System
 
-## Speech Notebook
-
-Use:
+The speech experiment is implemented in:
 
 ```text
 PoliMillionaire_Speech_Whisper.ipynb
 ```
-
-This notebook is intentionally separate from the text notebook.
 
 Speech pipeline:
 
@@ -103,10 +92,10 @@ server audio question/options
 -> local Whisper transcription
 -> deterministic transcript cleanup
 -> local text model answer
--> option_id submitted with official client
+-> official option_id submission
 ```
 
-Current speech setup:
+Current speech model settings:
 
 ```python
 WHISPER_MODEL_NAME = "openai/whisper-small"
@@ -114,7 +103,7 @@ ANSWER_MODEL_NAME = "Qwen/Qwen2.5-3B-Instruct"
 GAME_MODE = "speech"
 ```
 
-The speech notebook is also configured for category benchmarking:
+Default speech benchmark settings:
 
 ```python
 RUN_FULL_SPEECH_GAME = False
@@ -122,13 +111,10 @@ RUN_ALL_CATEGORIES_SPEECH_BENCHMARK = True
 SPEECH_BENCHMARK_RUNS_PER_CATEGORY = 3
 ```
 
-Speech mode is expected to be harder because audio fetching, ASR latency, and
-transcription errors happen before answering. The speech notebook logs
-transcripts, audio sizes, time remaining after transcription, model output, and
-final result. It also logs both raw transcripts and deterministically cleaned
-question/options so ASR-cleanup effects can be analyzed. A generative LLM
-normalizer was tested and removed because it sometimes changed or truncated
-answer options.
+Speech mode logs raw transcripts, cleaned transcripts, audio sizes, time
+remaining after ASR, model outputs, and final game results. A generative
+transcript normalizer was tested and removed because it sometimes changed or
+truncated answer options.
 
 ## Categories
 
@@ -139,61 +125,63 @@ answer options.
 | `science_nature` | Science and Nature | Chemistry, Biology, Physics and similar subjects |
 | `maths` | Maths | Mathematics and Statistics from High School and College |
 
-## Current Observations
+## Design Choices
 
-The model is fast enough in text mode: most answers are produced well below the
-30-second limit.
+### No RAG in the Main System
 
-Best leaderboard categories so far:
+RAG was considered but not used in the main submitted text system. The quiz is
+open-domain and time-limited to 30 seconds per question. A real-time retrieval
+pipeline would add latency, while a static corpus would be hard to justify for
+all categories without adding substantial noise.
+
+### Local Models Only
+
+All answer generation is performed locally with open-weight models. The notebooks
+do not call paid LLM APIs to answer quiz questions.
+
+### Deterministic Tools
+
+Maths uses deterministic tools only when a pattern is clear and stable, for
+example percentage changes, confidence-interval interpretation, hypothesis-test
+form selection, correlation interpretation, and selected statistics concepts.
+Otherwise, the specialized Maths model answers directly.
+
+## Observations
+
+Text mode is fast enough for the 30-second limit. Most text answers are produced
+in well under one second, except for some Maths questions.
+
+Strongest observed categories:
 
 - Entertainment
 - Science and Nature
 
-Current leaderboard status observed during testing:
+More unstable categories:
 
-```text
-Entertainment: full score reached
-Science and Nature: full score reached
-Ancient History and Politics: decent but unstable
-Maths: weakest category
-```
+- Ancient History and Politics
+- Maths
 
-Maths improved after adding:
+Maths improved after adding category routing, deterministic statistics tools,
+and a specialized Maths model, but it remains difficult because many questions
+are conceptual rather than simple arithmetic.
 
-- category routing;
-- specialized Maths model;
-- statistics heuristics;
-- deterministic Maths tools for recurring exam-style patterns;
-- better debug logs.
-
-But Maths remains difficult because many questions are not simple arithmetic.
-They include statistics theory, abstract algebra, optimization, hypothesis tests,
-sampling design, and geometry.
+Speech mode is harder than text mode because audio fetching and ASR happen before
+answering. The main errors come from transcription noise, especially for names,
+technical terms, numbers, and short answer options.
 
 ## Running in Colab
 
-1. Upload the project folder to Google Drive.
-2. Open either:
-
-```text
-PoliMillionaire_Steroids_Ensemble.ipynb
-```
-
-or:
-
-```text
-PoliMillionaire_Speech_Whisper.ipynb
-```
-
-3. Use a GPU runtime:
+1. Upload the repository folder to Google Drive.
+2. Open one of the active notebooks.
+3. Select a GPU runtime:
 
 ```text
 Runtime > Change runtime type > T4 GPU
 ```
 
-4. Run from top to bottom.
+4. Run the notebook from top to bottom.
 
-For a single text leaderboard run, change:
+For one single text-mode run instead of the all-category benchmark:
 
 ```python
 RUN_FULL_GAME = True
@@ -201,24 +189,26 @@ RUN_ALL_CATEGORIES_BENCHMARK = False
 COMPETITION_KEY = "science_nature"
 ```
 
-or:
+For speech mode, use the analogous flags:
 
 ```python
-COMPETITION_KEY = "entertainment"
+RUN_FULL_SPEECH_GAME = True
+RUN_ALL_CATEGORIES_SPEECH_BENCHMARK = False
+COMPETITION_KEY = "science_nature"
 ```
 
-## API Smoke Test
+## Local API Smoke Test
 
-To check that the official API client works locally:
+To verify that the official API client works:
 
 ```powershell
 python tests/test_api_smoke.py
 ```
 
-This logs in, lists competitions, starts a text game, and prints the question
-format without submitting an answer.
+This logs in, lists competitions, starts a text-mode game, and prints the
+question format without submitting an answer.
 
-To submit a real answer:
+To submit the first option as a real test answer:
 
 ```powershell
 python tests/test_api_smoke.py --answer-first-option
@@ -226,23 +216,16 @@ python tests/test_api_smoke.py --answer-first-option
 
 ## Repository Notes
 
-Not pushed on purpose:
+`PoliMillionaire_Rana_Starter_Ensemble.ipynb` is intentionally not tracked. It
+was used only as external reference material while comparing ideas.
 
-```text
-PoliMillionaire_Rana_Starter_Ensemble.ipynb
-```
+The submitted work should focus on the two active notebooks listed above.
 
-That notebook was used only as inspiration/reference. The useful ideas were
-integrated into our cleaner notebooks where appropriate.
+## Final Submission Reminder
 
-## TODO for Final Submission
+Before uploading to WeBeep, the notebook header should include:
 
-- Add group member names and Polimi emails.
-- Add presentation video link.
-- Add coding assistant usage statement.
-- Export final notebook to `.html`.
-- Add more benchmark tables across repeated runs.
-- Add concise error analysis by category.
-- Explain why RAG was not used in the main system.
-- Explain speech-mode limitations and ASR impact.
-- Ensure final code comments follow the Yoda-speaking-style requirement.
+- group member names and Polimi email addresses;
+- video link;
+- coding assistant usage statement;
+- exported `.html` version of the final notebook.
