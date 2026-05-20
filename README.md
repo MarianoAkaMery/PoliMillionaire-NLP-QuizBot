@@ -99,7 +99,7 @@ Speech pipeline:
 ```text
 server audio question/options
 -> local Whisper transcription
--> local transcript normalization
+-> deterministic transcript cleanup
 -> local text model answer
 -> option_id submitted with official client
 ```
@@ -118,14 +118,15 @@ The speech notebook is also configured for category benchmarking:
 RUN_FULL_SPEECH_GAME = False
 RUN_ALL_CATEGORIES_SPEECH_BENCHMARK = True
 SPEECH_BENCHMARK_RUNS_PER_CATEGORY = 3
-USE_SPEECH_NORMALIZATION = True
 ```
 
 Speech mode is expected to be harder because audio fetching, ASR latency, and
 transcription errors happen before answering. The speech notebook logs
 transcripts, audio sizes, time remaining after transcription, model output, and
-final result. It also logs both raw transcripts and normalized question/options
-so ASR-cleanup effects can be analyzed.
+final result. It also logs both raw transcripts and deterministically cleaned
+question/options so ASR-cleanup effects can be analyzed. A generative LLM
+normalizer was tested and removed because it sometimes changed or truncated
+answer options.
 
 ## Categories
 
