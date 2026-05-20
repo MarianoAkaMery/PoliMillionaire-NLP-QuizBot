@@ -72,15 +72,17 @@ MATH_MODEL_NAME = "Qwen/Qwen2.5-Math-1.5B-Instruct"
 LOAD_IN_4BIT = True
 USE_ENSEMBLE = False
 MAX_NEW_TOKENS = 2
-MATH_MAX_NEW_TOKENS = 8
+MATH_MAX_NEW_TOKENS = 4
 ```
 
 For Maths, the decision order is:
 
 1. custom Maths/statistics tool;
 2. simple calculator;
-3. local Maths question normalization;
-4. specialized Maths model.
+3. specialized Maths model.
+
+Generative Maths question rewriting was tested and removed from the default
+pipeline because it added latency and sometimes produced non-parsable answers.
 
 For the other categories, the system uses the general 3B model.
 
@@ -161,6 +163,7 @@ Maths improved after adding:
 - category routing;
 - specialized Maths model;
 - statistics heuristics;
+- deterministic Maths tools for recurring exam-style patterns;
 - better debug logs.
 
 But Maths remains difficult because many questions are not simple arithmetic.
