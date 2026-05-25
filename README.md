@@ -54,7 +54,14 @@ Entertainment
 Ancient History and Politics
 Science and Nature
 Maths
+Philosophy and Psychology
+News
 ```
+
+The notebook contains provisional IDs for the six known categories, then
+refreshes them from `client.competitions.list_all()` after login. This keeps the
+benchmark aligned with the final testing phase if the server assigns different
+public IDs.
 
 Current text model settings:
 
@@ -124,6 +131,8 @@ truncated answer options.
 | `ancient_history_politics` | Ancient History and Politics | The Roman Empire, The Greeks, and more |
 | `science_nature` | Science and Nature | Chemistry, Biology, Physics and similar subjects |
 | `maths` | Maths | Mathematics and Statistics from High School and College |
+| `philosophy_psychology` | Philosophy and Psychology | Great thinkers and the human psyche |
+| `news` | News | Staying current with global breaking news |
 
 ## Design Choices
 
