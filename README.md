@@ -13,8 +13,8 @@ The repository contains two active notebooks:
 
 | Notebook | Purpose |
 | --- | --- |
-| `PoliMillionaire_Steroids_Ensemble.ipynb` | Main text-mode system and benchmark notebook |
-| `PoliMillionaire_Speech_Whisper.ipynb` | Speech-mode experiment using local Whisper ASR |
+| `PoliMillionaire_Text_QuizBot.ipynb` | Main text-mode system and benchmark notebook |
+| `PoliMillionaire_Speech_QuizBot.ipynb` | Speech-mode experiment using local Whisper ASR |
 
 The original `PoliMillionaire.ipynb` is kept as professor-provided reference
 material for the game API. The `millionaire_client/` package is the official
@@ -25,7 +25,7 @@ course client used by both notebooks.
 The main system is implemented in:
 
 ```text
-PoliMillionaire_Steroids_Ensemble.ipynb
+PoliMillionaire_Text_QuizBot.ipynb
 ```
 
 It uses:
@@ -89,7 +89,7 @@ outputs.
 The speech experiment is implemented in:
 
 ```text
-PoliMillionaire_Speech_Whisper.ipynb
+PoliMillionaire_Speech_QuizBot.ipynb
 ```
 
 Speech pipeline:

@@ -4,7 +4,7 @@ Short guide for the project video and final interview.
 
 ## Main System
 
-The main submitted system is `PoliMillionaire_Steroids_Ensemble.ipynb`.
+The main submitted system is `PoliMillionaire_Text_QuizBot.ipynb`.
 
 It uses text mode because the official game API already returns the question and
 answer options in textual form. This is the cleanest and fastest interface for a
@@ -62,7 +62,7 @@ latency and sometimes produced non-parsable outputs.
 
 ## Speech Experiment
 
-The speech notebook is `PoliMillionaire_Speech_Whisper.ipynb`.
+The speech notebook is `PoliMillionaire_Speech_QuizBot.ipynb`.
 
 Pipeline:
 
