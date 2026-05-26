@@ -47,6 +47,11 @@ Reasons:
 The final system instead focuses on local models, prompt design, deterministic
 tools, and benchmark analysis.
 
+News is the strongest argument for future retrieval. In the final testing phase,
+several News questions reference specific articles and dates from May 2026. A
+local model without web retrieval cannot reliably know those facts, so it must
+infer from the wording and answer choices.
+
 ## Maths Strategy
 
 Maths is the weakest and most variable category.
