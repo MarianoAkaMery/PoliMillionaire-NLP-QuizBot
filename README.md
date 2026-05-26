@@ -7,6 +7,14 @@ The project builds and evaluates local open-weight chatbot systems that play the
 official online quiz through the course-provided API client. No paid LLM APIs are
 used for answering questions.
 
+## Group Members
+
+- Salvatore Mariano Librici - salvatoremariano.librici@mail.polimi.it
+- Rong Huang - rong.huang@mail.polimi.it
+- Soumyadeep Sharma - soumyadeep.sharma@mail.polimi.it
+- Merve Rana K?z?l - merverana.kizil@mail.polimi.it
+- Selahattin Cem ?zt?rk - selahattincem.ozturk@mail.polimi.it
+
 ## Submitted Notebooks
 
 The repository contains two active notebooks:
@@ -37,7 +45,7 @@ It uses:
 - all-category benchmarking;
 - JSON run logs;
 - deterministic Maths/statistics tools for recurring patterns;
-- a specialized local Maths model as fallback for Maths questions.
+- an implemented but disabled specialized Maths route, kept for reproducibility.
 
 Default benchmark settings:
 
@@ -71,14 +79,18 @@ MATH_MODEL_NAME = "Qwen/Qwen2.5-Math-1.5B-Instruct"
 LOAD_IN_4BIT = True
 USE_ENSEMBLE = False
 MAX_NEW_TOKENS = 2
-MATH_MAX_NEW_TOKENS = 4
+MATH_MAX_NEW_TOKENS = 96
+USE_SPECIALIZED_MATH_MODEL = False
 ```
 
-For Maths, the decision order is:
+For Maths, the submitted decision order is:
 
-1. custom Maths/statistics heuristics;
-2. simple calculator;
-3. specialized Maths model.
+1. deterministic calculator/tools when the pattern is reliable;
+2. the main local text model with the Maths category prompt.
+
+A specialized Qwen2.5-Math route is implemented in the notebook, but disabled by
+default because final tests did not show a stable enough improvement to justify
+the extra memory and latency.
 
 Generative Maths question rewriting was tested and removed from the default
 pipeline because it increased latency and sometimes produced non-parsable model
@@ -138,10 +150,11 @@ truncated answer options.
 
 ### No RAG in the Main System
 
-RAG was considered but not used in the main submitted text system. The quiz is
-open-domain and time-limited to 30 seconds per question. A real-time retrieval
-pipeline would add latency, while a static corpus would be hard to justify for
-all categories without adding substantial noise.
+RAG was explored by the group but not used in the main submitted text system.
+The quiz is open-domain and time-limited to 30 seconds per question. A real-time
+retrieval pipeline added latency and did not provide a consistent enough
+improvement in our tests. News is the clearest future use case, but Wikipedia was
+not reliable enough for recent article-specific questions.
 
 ### Local Models Only
 
@@ -150,29 +163,34 @@ do not call paid LLM APIs to answer quiz questions.
 
 ### Deterministic Tools
 
-Maths uses deterministic tools only when a pattern is clear and stable, for
-example percentage changes, confidence-interval interpretation, hypothesis-test
-form selection, correlation interpretation, and selected statistics concepts.
-Otherwise, the specialized Maths model answers directly.
+Maths uses deterministic tools only when a pattern is clear and stable, mainly
+for direct arithmetic and percentage expressions. A specialized Maths model route
+was implemented and tested, but is disabled in the submitted configuration after
+final runs showed no consistent improvement.
 
 ## Observations
 
 Text mode is fast enough for the 30-second limit. Most text answers are produced
 in well under one second, except for some Maths questions.
 
-Strongest observed categories:
+Strongest observed category:
+
+- Philosophy and Psychology
+
+Useful but variable categories:
 
 - Entertainment
+- Ancient History and Politics
 - Science and Nature
 
-More unstable categories:
+Most difficult categories:
 
-- Ancient History and Politics
 - Maths
+- News
 
-Maths improved after adding category routing, deterministic statistics tools,
-and a specialized Maths model, but it remains difficult because many questions
-are conceptual rather than simple arithmetic.
+Maths remains difficult because many questions are conceptual rather than simple
+arithmetic. News remains difficult because many questions depend on very recent,
+article-specific facts.
 
 Speech mode is harder than text mode because audio fetching and ASR happen before
 answering. The main errors come from transcription noise, especially for names,
