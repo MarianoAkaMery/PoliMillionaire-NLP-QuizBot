@@ -12,8 +12,8 @@ used for answering questions.
 - Salvatore Mariano Librici - salvatoremariano.librici@mail.polimi.it
 - Rong Huang - rong.huang@mail.polimi.it
 - Soumyadeep Sharma - soumyadeep.sharma@mail.polimi.it
-- Merve Rana K?z?l - merverana.kizil@mail.polimi.it
-- Selahattin Cem ?zt?rk - selahattincem.ozturk@mail.polimi.it
+- Merve Rana Kizil - merverana.kizil@mail.polimi.it
+- Selahattin Cem Ozturk - selahattincem.ozturk@mail.polimi.it
 
 ## Submitted Notebooks
 
