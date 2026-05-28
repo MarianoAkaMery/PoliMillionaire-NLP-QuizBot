@@ -28,6 +28,11 @@ The original `PoliMillionaire.ipynb` is kept as professor-provided reference
 material for the game API. The `millionaire_client/` package is the official
 course client used by both notebooks.
 
+## Submission Videos
+
+- [5-minute notebook presentation](https://www.youtube.com/watch?v=evtf6K6-Tvg)
+- [Optional long system demo](https://www.youtube.com/watch?v=pEzU3mz5Gos)
+
 ## Main Text System
 
 The main system is implemented in:
@@ -224,35 +229,13 @@ RUN_ALL_CATEGORIES_SPEECH_BENCHMARK = False
 COMPETITION_KEY = "science_nature"
 ```
 
-## Local API Smoke Test
+## Final Notes
 
-To verify that the official API client works:
+The text notebook is the main submitted system. The speech notebook is included
+as a separate experiment showing how the same local answering strategy behaves
+when questions and options are first transcribed from audio.
 
-```powershell
-python tests/test_api_smoke.py
-```
+Both notebooks use the official course client and local open-weight models only.
+They include the group information, presentation video links, and coding
+assistant usage statement at the top of the notebook.
 
-This logs in, lists competitions, starts a text-mode game, and prints the
-question format without submitting an answer.
-
-To submit the first option as a real test answer:
-
-```powershell
-python tests/test_api_smoke.py --answer-first-option
-```
-
-## Repository Notes
-
-`PoliMillionaire_Rana_Starter_Ensemble.ipynb` is intentionally not tracked. It
-was used only as external reference material while comparing ideas.
-
-The submitted work should focus on the two active notebooks listed above.
-
-## Final Submission Reminder
-
-Before uploading to WeBeep, the notebook header should include:
-
-- group member names and Polimi email addresses;
-- video link;
-- coding assistant usage statement;
-- exported `.html` version of the final notebook.
